@@ -8,10 +8,11 @@ module.exports = {
   async viteFinal(config) {
     // Set relative base path to support deployment on path like /storybook
     config.base = './';
+    config.optimizeDeps = config.optimizeDeps || {};
     config.optimizeDeps.include = [
       'react-is',
       '@base2/pretty-print-object',
-      ...config?.optimizeDeps?.include,
+      ...(config.optimizeDeps.include || []),
     ];
     return config;
   },

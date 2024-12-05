@@ -46,6 +46,7 @@ const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => (
       }
       alt={movie.title}
       className={styles['movie-img']}
+      style={{ minWidth: '200px', minHeight: '300px' }}
     />
     <fieldset>
       <legend>{movie.title}</legend>

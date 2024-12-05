@@ -18,11 +18,61 @@ interface Movie {
   genre_ids: number[];
   poster_path: string;
   release_date: string;
-  runtime?: number; // Make runtime optional
-  // Add other properties as needed
+  runtime?: number;
 }
 
-function App(): JSX.Element {
+const getGenreNames = (genreIds: number[]): string => {
+  return genreIds
+    .map((id) => genres.find((genre: Genre) => genre.id === id)?.name)
+    .filter((name) => name)
+    .join(', ');
+};
+
+const formatRuntime = (runtime?: number): string => {
+  if (runtime === undefined) return 'N/A';
+  const hours = Math.floor(runtime / 60);
+  const minutes = runtime % 60;
+  return `${hours}h ${minutes}m`;
+};
+
+const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => (
+  <div key={movie.id} className={styles.movie}>
+    <img
+      src={
+        movie.poster_path
+          ? `https://image.tmdb.org/t/p/w200${movie.poster_path}`
+          : 'src/app/default-poster.png'
+      }
+      alt={movie.title}
+      className={styles['movie-img']}
+    />
+    <fieldset>
+      <legend>{movie.title}</legend>
+      {!isNaN(new Date(movie.release_date).getFullYear()) && (
+        <p className={styles.smallText}>
+          ({new Date(movie.release_date).getFullYear()})
+        </p>
+      )}
+      <p className={styles.smallText}>
+        Genres: <em>{getGenreNames(movie.genre_ids)}</em>
+      </p>
+      <p className={styles.smallText}>
+        Runtime: {formatRuntime(movie.runtime)}{' '}
+        {movie.runtime && movie.runtime > 120 && '⏰⚠️🚨'}
+      </p>
+      <a
+        href={`https://www.themoviedb.org/movie/${movie.id}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={styles['external-link']}
+      >
+        <i className="fas fa-external-link-alt"></i>
+      </a>
+    </fieldset>
+  </div>
+);
+
+const App: React.FC = () => {
   const [query, setQuery] = useState<string>('');
   const [results, setResults] = useState<Movie[]>([]);
 
@@ -46,20 +96,6 @@ function App(): JSX.Element {
     setResults(detailedMovies);
   };
 
-  const getGenreNames = (genreIds: number[]): string => {
-    return genreIds
-      .map((id) => genres.find((genre: Genre) => genre.id === id)?.name)
-      .filter((name) => name)
-      .join(', ');
-  };
-
-  const formatRuntime = (runtime?: number): string => {
-    if (runtime === undefined) return 'N/A';
-    const hours = Math.floor(runtime / 60);
-    const minutes = runtime % 60;
-    return `${hours}h ${minutes}m`;
-  };
-
   return (
     <Router>
       <div className={styles.App}>
@@ -74,43 +110,10 @@ function App(): JSX.Element {
               Search
             </button>
           </div>
-          <div className={`${styles['results']} ${styles['padding-vertical']}`}>
+          <div className={`${styles.results} ${styles['padding-vertical']}`}>
             <Carousel className={styles.carousel}>
               {results.map((movie) => (
-                <div key={movie.id} className={styles['movie']}>
-                  <img
-                    src={
-                      movie.poster_path
-                        ? `https://image.tmdb.org/t/p/w200${movie.poster_path}`
-                        : 'src/app/default-poster.png'
-                    }
-                    alt={movie.title}
-                    className={styles['movie-img']}
-                  />
-                  <fieldset>
-                    <legend>{movie.title}</legend>
-                    {!isNaN(new Date(movie.release_date).getFullYear()) && (
-                      <p className={styles.smallText}>
-                        ({new Date(movie.release_date).getFullYear()})
-                      </p>
-                    )}
-                    <p className={styles.smallText}>
-                      Genres: <em>{getGenreNames(movie.genre_ids)}</em>
-                    </p>
-                    <p className={styles.smallText}>
-                      Runtime: {formatRuntime(movie.runtime)}{' '}
-                      {movie.runtime && movie.runtime > 120 && '⏰⚠️🚨'}
-                    </p>
-                    <a
-                      href={`https://www.themoviedb.org/movie/${movie.id}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={styles['external-link']}
-                    >
-                      <i className="fas fa-external-link-alt"></i>
-                    </a>
-                  </fieldset>
-                </div>
+                <MovieCard key={movie.id} movie={movie} />
               ))}
             </Carousel>
           </div>
@@ -118,6 +121,6 @@ function App(): JSX.Element {
       </div>
     </Router>
   );
-}
+};
 
 export default App;

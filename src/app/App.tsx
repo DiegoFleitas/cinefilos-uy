@@ -153,6 +153,15 @@ const App: React.FC = () => {
         const data = await response.json();
         totalPages = data.total_pages;
 
+        if (data.results.length === 0) {
+          window.open(
+            `https://www.google.com/search?q=${encodeURIComponent(title)}`,
+            '_blank'
+          );
+          setIsLoading(false);
+          return [];
+        }
+
         movies.push(...data.results);
         page++;
       }

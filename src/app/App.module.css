@@ -56,9 +56,15 @@ button {
   max-height: 750px;
 }
 
+.carouselContainer {
+  max-width: 500px;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
 .carousel {
-  width: 100%; /* Adjust the width as needed */
-  margin: 0 auto; /* Center the carousel */
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .smallText {

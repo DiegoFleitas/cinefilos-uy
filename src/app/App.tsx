@@ -18,6 +18,7 @@ interface Movie {
   genre_ids: number[];
   poster_path: string;
   release_date: string;
+  runtime?: number; // Make runtime optional
   // Add other properties as needed
 }
 
@@ -30,7 +31,19 @@ function App(): JSX.Element {
       `/api/proxy/https://api.themoviedb.org/3/search/movie?query=${query}`
     );
     const data = await response.json();
-    setResults(data.results);
+    const movies = data.results;
+
+    const detailedMovies = await Promise.all(
+      movies.map(async (movie: Movie) => {
+        const movieDetailsResponse = await fetch(
+          `/api/proxy/https://api.themoviedb.org/3/movie/${movie.id}`
+        );
+        const movieDetails = await movieDetailsResponse.json();
+        return { ...movie, runtime: movieDetails.runtime };
+      })
+    );
+
+    setResults(detailedMovies);
   };
 
   const getGenreNames = (genreIds: number[]): string => {
@@ -38,6 +51,13 @@ function App(): JSX.Element {
       .map((id) => genres.find((genre: Genre) => genre.id === id)?.name)
       .filter((name) => name)
       .join(', ');
+  };
+
+  const formatRuntime = (runtime?: number): string => {
+    if (runtime === undefined) return 'N/A';
+    const hours = Math.floor(runtime / 60);
+    const minutes = runtime % 60;
+    return `${hours}h ${minutes}m`;
   };
 
   return (
@@ -76,6 +96,10 @@ function App(): JSX.Element {
                     )}
                     <p className={styles.smallText}>
                       Genres: <em>{getGenreNames(movie.genre_ids)}</em>
+                    </p>
+                    <p className={styles.smallText}>
+                      Runtime: {formatRuntime(movie.runtime)}{' '}
+                      {movie.runtime && movie.runtime > 120 && '⏰⚠️🚨'}
                     </p>
                     <a
                       href={`https://www.themoviedb.org/movie/${movie.id}`}

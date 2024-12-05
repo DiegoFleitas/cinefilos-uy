@@ -76,7 +76,7 @@ const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => (
 
 const App: React.FC = () => {
   const [query, setQuery] = useState<string>('');
-  const [results, setResults] = useState<Movie[]>([]);
+  const [results, setResults] = useState<Movie[][]>([]);
 
   const handleSearch = async () => {
     const movieTitles = parseInput(query);
@@ -109,7 +109,7 @@ const App: React.FC = () => {
       }
     }
 
-    setResults(detailedMovies);
+    setResults((prevResults) => [detailedMovies, ...prevResults]);
   };
 
   return (
@@ -127,13 +127,15 @@ const App: React.FC = () => {
             </button>
           </div>
           <div className={`${styles.results} ${styles['padding-vertical']}`}>
-            <div className={styles.carouselContainer}>
-              <Carousel className={styles.carousel}>
-                {results.map((movie) => (
-                  <MovieCard key={movie.id} movie={movie} />
-                ))}
-              </Carousel>
-            </div>
+            {results.map((movies, index) => (
+              <div key={index} className={styles.carouselContainer}>
+                <Carousel className={styles.carousel}>
+                  {movies.map((movie) => (
+                    <MovieCard key={movie.id} movie={movie} />
+                  ))}
+                </Carousel>
+              </div>
+            ))}
           </div>
         </header>
       </div>

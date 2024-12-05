@@ -1,13 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import styles from './App.module.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Welcome from './components/Welcome/Welcome';
+import { genres } from './constants';
+
+interface Genre {
+  id: number;
+  name: string;
+}
 
 interface Movie {
   id: number;
   title: string;
   overview: string;
+  genre_ids: number[];
+  poster_path: string;
+  release_date: string;
   // Add other properties as needed
 }
 
@@ -23,59 +32,41 @@ function App(): JSX.Element {
     setResults(data.results);
   };
 
+  const getGenreNames = (genreIds: number[]): string => {
+    return genreIds
+      .map((id) => genres.find((genre: Genre) => genre.id === id)?.name)
+      .filter((name) => name)
+      .join(', ');
+  };
+
   return (
     <Router>
       <div className={styles.App}>
         <header className={styles['App-header']}>
           <img src={logo} className={styles['App-logo']} alt="logo" />
           <Welcome />
-          <p>
-            Edit <code>App.tsx</code> and save to test HMR updates.
-          </p>
-          <p>
-            <a
-              className={styles['App-link']}
-              href="https://reactjs.org"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn React
-            </a>
-            {' | '}
-            <a
-              className={styles['App-link']}
-              href="https://vitejs.dev/guide/features.html"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Vite Docs
-            </a>
-          </p>
-          <div>
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search for a movie"
-            />
-            <button onClick={handleSearch}>Search</button>
-          </div>
-          <div>
-            {results.map((result) => (
-              <div key={result.id}>
-                <h3>{result.title}</h3>
-                <p>{result.overview}</p>
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+          />
+          <button onClick={handleSearch}>Search</button>
+          <div className={styles['results']}>
+            {results.map((movie) => (
+              <div key={movie.id} className={styles['movie']}>
+                <img
+                  src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
+                  alt={movie.title}
+                />
+                <h2>{movie.title}</h2>
+                <p>{movie.overview}</p>
+                <p>
+                  Release Year: {new Date(movie.release_date).getFullYear()}
+                </p>
+                <p>Genres: {getGenreNames(movie.genre_ids)}</p>
               </div>
             ))}
           </div>
-          <Switch>
-            <Route path="/about">
-              <main>About</main>
-            </Route>
-            <Route path="/">
-              <main>Home</main>
-            </Route>
-          </Switch>
         </header>
       </div>
     </Router>

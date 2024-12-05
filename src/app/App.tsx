@@ -77,8 +77,10 @@ const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => (
 const App: React.FC = () => {
   const [query, setQuery] = useState<string>('');
   const [results, setResults] = useState<Movie[][]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleSearch = async () => {
+    setIsLoading(true);
     const movieTitles = parseInput(query);
     const detailedMovies: Movie[] = [];
 
@@ -110,6 +112,7 @@ const App: React.FC = () => {
     }
 
     setResults((prevResults) => [detailedMovies, ...prevResults]);
+    setIsLoading(false);
   };
 
   return (
@@ -122,8 +125,12 @@ const App: React.FC = () => {
               onChange={(e) => setQuery(e.target.value)}
               className={styles.input}
             />
-            <button className={styles.button} onClick={handleSearch}>
-              Search
+            <button
+              className={styles.button}
+              onClick={handleSearch}
+              disabled={isLoading}
+            >
+              {isLoading ? 'Searching...' : 'Search'}
             </button>
           </div>
           <div className={`${styles.results} ${styles['padding-vertical']}`}>

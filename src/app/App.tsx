@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styles from './App.module.css';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { genres } from './constants';
+import { genres, blacklist } from './constants';
 import { Carousel } from 'react-responsive-carousel';
 import { parseInput } from './utils/parseInput';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -36,6 +36,10 @@ const formatRuntime = (runtime?: number): string => {
   return `${hours}h ${minutes}m`;
 };
 
+const isMovieBlacklisted = (movieId: number): boolean => {
+  return blacklist.some((item) => item.tmdbID === movieId);
+};
+
 const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => (
   <div key={movie.id} className={styles.movie}>
     <img
@@ -61,6 +65,12 @@ const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => (
       <p className={styles.smallText}>
         Runtime: {formatRuntime(movie.runtime)}{' '}
         {movie.runtime && movie.runtime > 120 && '⏰⚠️🚨'}
+      </p>
+      <p className={styles.smallText}>
+        Eligibility:{' '}
+        {isMovieBlacklisted(movie.id)
+          ? '🎬🚫🔄 Not Eligible'
+          : '👌🎉👍 Eligible'}
       </p>
       <a
         href={`https://www.themoviedb.org/movie/${movie.id}`}

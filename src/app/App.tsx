@@ -45,15 +45,17 @@ function App(): JSX.Element {
     <Router>
       <div className={styles.App}>
         <header className={styles['App-header']}>
-          <img src={logo} className={styles['App-logo']} alt="logo" />
-          <Welcome />
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-          <button onClick={handleSearch}>Search</button>
-          <div className={styles['results']}>
+          <div className={styles.paddingVertical}>
+            <textarea
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className={styles.input}
+            />
+            <button className={styles.button} onClick={handleSearch}>
+              Search
+            </button>
+          </div>
+          <div className={`${styles['results']} ${styles['padding-vertical']}`}>
             <Carousel className={styles.carousel}>
               {results.map((movie) => (
                 <div key={movie.id} className={styles['movie']}>
@@ -68,11 +70,14 @@ function App(): JSX.Element {
                   />
                   <fieldset>
                     <legend>{movie.title}</legend>
-                    {/* <p>{movie.overview}</p> */}
-                    <p>
-                      Release Year: {new Date(movie.release_date).getFullYear()}
+                    {!isNaN(new Date(movie.release_date).getFullYear()) && (
+                      <p className={styles.smallText}>
+                        ({new Date(movie.release_date).getFullYear()})
+                      </p>
+                    )}
+                    <p className={styles.smallText}>
+                      Genres: <em>{getGenreNames(movie.genre_ids)}</em>
                     </p>
-                    <p>Genres: {getGenreNames(movie.genre_ids)}</p>
                   </fieldset>
                 </div>
               ))}

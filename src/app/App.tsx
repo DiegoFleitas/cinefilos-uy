@@ -84,6 +84,42 @@ const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => (
   </div>
 );
 
+const SearchBar: React.FC<{
+  query: string;
+  setQuery: React.Dispatch<React.SetStateAction<string>>;
+  handleSearch: () => void;
+  isLoading: boolean;
+}> = ({ query, setQuery, handleSearch, isLoading }) => (
+  <div className={styles.paddingVertical}>
+    <textarea
+      value={query}
+      onChange={(e) => setQuery(e.target.value)}
+      className={styles.input}
+    />
+    <button
+      className={styles.button}
+      onClick={handleSearch}
+      disabled={isLoading}
+    >
+      {isLoading ? 'Searching...' : 'Search'}
+    </button>
+  </div>
+);
+
+const Results: React.FC<{ results: Movie[][] }> = ({ results }) => (
+  <div className={`${styles.results} ${styles['padding-vertical']}`}>
+    {results.map((movies, index) => (
+      <div key={index} className={styles.carouselContainer}>
+        <Carousel className={styles.carousel}>
+          {movies.map((movie) => (
+            <MovieCard key={movie.id} movie={movie} />
+          ))}
+        </Carousel>
+      </div>
+    ))}
+  </div>
+);
+
 const App: React.FC = () => {
   const [query, setQuery] = useState<string>('');
   const [results, setResults] = useState<Movie[][]>([]);
@@ -129,31 +165,13 @@ const App: React.FC = () => {
     <Router>
       <div className={styles.App}>
         <header className={styles['App-header']}>
-          <div className={styles.paddingVertical}>
-            <textarea
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className={styles.input}
-            />
-            <button
-              className={styles.button}
-              onClick={handleSearch}
-              disabled={isLoading}
-            >
-              {isLoading ? 'Searching...' : 'Search'}
-            </button>
-          </div>
-          <div className={`${styles.results} ${styles['padding-vertical']}`}>
-            {results.map((movies, index) => (
-              <div key={index} className={styles.carouselContainer}>
-                <Carousel className={styles.carousel}>
-                  {movies.map((movie) => (
-                    <MovieCard key={movie.id} movie={movie} />
-                  ))}
-                </Carousel>
-              </div>
-            ))}
-          </div>
+          <SearchBar
+            query={query}
+            setQuery={setQuery}
+            handleSearch={handleSearch}
+            isLoading={isLoading}
+          />
+          <Results results={results} />
         </header>
       </div>
     </Router>

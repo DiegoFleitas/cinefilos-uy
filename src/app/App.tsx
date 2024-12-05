@@ -60,17 +60,15 @@ const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => (
         </p>
       )}
       <p className={styles.smallText}>
-        Genres: <em>{getGenreNames(movie.genre_ids)}</em>
+        Generos: <em>{getGenreNames(movie.genre_ids)}</em>
       </p>
       <p className={styles.smallText}>
-        Runtime: {formatRuntime(movie.runtime)}{' '}
+        Duracion: {formatRuntime(movie.runtime)}{' '}
         {movie.runtime && movie.runtime > 120 && '⏰⚠️🚨'}
       </p>
       <p className={styles.smallText}>
-        Eligibility:{' '}
-        {isMovieBlacklisted(movie.id)
-          ? '🎬🚫🔄 Not Eligible'
-          : '👌🎉👍 Eligible'}
+        Eligibilidad:{' '}
+        {isMovieBlacklisted(movie.id) ? '🎬🚫🔄 Ya la vimos!!' : '👌🎉👍'}
       </p>
       <a
         href={`https://www.themoviedb.org/movie/${movie.id}`}
@@ -101,7 +99,7 @@ const SearchBar: React.FC<{
       onClick={handleSearch}
       disabled={isLoading}
     >
-      {isLoading ? 'Searching...' : 'Search'}
+      {isLoading ? 'Buscando...' : 'Buscar'}
     </button>
   </div>
 );

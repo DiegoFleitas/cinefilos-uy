@@ -80,23 +80,25 @@ const App: React.FC = () => {
   const handleSearch = async () => {
     const movieTitles = parseInput(query);
     const detailedMovies = await Promise.all(
-      movieTitles.map(async (title) => {
-        const response = await fetch(
-          `/api/proxy/https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(
-            title
-          )}`
-        );
-        const data = await response.json();
-        const movie = data.results[0];
-        if (movie) {
-          const movieDetailsResponse = await fetch(
-            `/api/proxy/https://api.themoviedb.org/3/movie/${movie.id}`
+      (Array.isArray(movieTitles) ? movieTitles : [movieTitles]).map(
+        async (title) => {
+          const response = await fetch(
+            `/api/proxy/https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(
+              title
+            )}`
           );
-          const movieDetails = await movieDetailsResponse.json();
-          return { ...movie, runtime: movieDetails.runtime };
+          const data = await response.json();
+          const movie = data.results[0];
+          if (movie) {
+            const movieDetailsResponse = await fetch(
+              `/api/proxy/https://api.themoviedb.org/3/movie/${movie.id}`
+            );
+            const movieDetails = await movieDetailsResponse.json();
+            return { ...movie, runtime: movieDetails.runtime };
+          }
+          return null;
         }
-        return null;
-      })
+      )
     );
 
     setResults(detailedMovies.filter((movie) => movie !== null) as Movie[]);

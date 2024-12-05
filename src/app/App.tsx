@@ -125,18 +125,26 @@ const App: React.FC = () => {
   const [results, setResults] = useState<Movie[][]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  const MAX_MOVIES = 15;
+
   const handleSearch = async () => {
     setIsLoading(true);
     const movieTitles = parseInput(query);
     const detailedMovies: Movie[] = [];
 
-    for (const title of Array.isArray(movieTitles)
-      ? movieTitles
-      : [movieTitles]) {
+    const fetchMovieDetails = async (movieId: number) => {
+      const response = await fetch(
+        `/api/proxy/https://api.themoviedb.org/3/movie/${movieId}`
+      );
+      return response.json();
+    };
+
+    const fetchMovies = async (title: string) => {
       let page = 1;
       let totalPages = 1;
+      const movies: Movie[] = [];
 
-      while (page <= totalPages) {
+      while (page <= totalPages && movies.length < MAX_MOVIES) {
         const response = await fetch(
           `/api/proxy/https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(
             title
@@ -145,17 +153,28 @@ const App: React.FC = () => {
         const data = await response.json();
         totalPages = data.total_pages;
 
-        for (const movie of data.results) {
-          const movieDetailsResponse = await fetch(
-            `/api/proxy/https://api.themoviedb.org/3/movie/${movie.id}`
-          );
-          const movieDetails = await movieDetailsResponse.json();
-          detailedMovies.push({ ...movie, runtime: movieDetails.runtime });
-        }
-
+        movies.push(...data.results);
         page++;
       }
-    }
+
+      return movies.slice(0, MAX_MOVIES);
+    };
+
+    const movieTitlesArray = Array.isArray(movieTitles)
+      ? movieTitles
+      : [movieTitles];
+    const moviePromises = movieTitlesArray.map((title) => fetchMovies(title));
+    const moviesArray = await Promise.all(moviePromises);
+
+    const allMovies = moviesArray.flat().slice(0, MAX_MOVIES);
+    const movieDetailsPromises = allMovies.map((movie) =>
+      fetchMovieDetails(movie.id)
+    );
+    const movieDetailsArray = await Promise.all(movieDetailsPromises);
+
+    movieDetailsArray.forEach((details, index) => {
+      detailedMovies.push({ ...allMovies[index], runtime: details.runtime });
+    });
 
     setResults((prevResults) => [detailedMovies, ...prevResults]);
     setIsLoading(false);

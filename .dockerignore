@@ -1,0 +1,12 @@
+# flyctl launch added from .gitignore
+**/node_modules
+**/.DS_Store
+**/dist
+**/dist-ssr
+**/*.local
+**/.eslintcache
+**/.env
+
+# flyctl launch added from .husky/_/.gitignore
+.husky/_/**/*
+fly.toml

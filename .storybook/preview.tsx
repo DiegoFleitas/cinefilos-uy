@@ -1,11 +1,13 @@
 import React from 'react';
-import { addDecorator } from '@storybook/react';
+import { Decorator } from '@storybook/react';
 import { MemoryRouter } from 'react-router-dom';
 
 import '../src/app/globals.css';
 
 export const parameters = {
-  actions: { argTypesRegex: '^on[A-Z].*' },
+  actions: {
+    /* Remove argTypesRegex */
+  },
   controls: {
     matchers: {
       color: /(background|color)$/i,
@@ -14,4 +16,10 @@ export const parameters = {
   },
 };
 
-addDecorator((story) => <MemoryRouter>{story()}</MemoryRouter>);
+export const decorators: Decorator[] = [
+  (Story) => (
+    <MemoryRouter>
+      <Story />
+    </MemoryRouter>
+  ),
+];

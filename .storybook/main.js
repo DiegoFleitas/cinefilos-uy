@@ -1,10 +1,14 @@
-module.exports = {
+import { StorybookConfig } from '@storybook/react-vite';
+
+const config = {
   stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
-  addons: ['@storybook/addon-links', '@storybook/addon-essentials'],
-  framework: '@storybook/react',
-  core: {
-    builder: 'storybook-builder-vite',
-  },
+  addons: [
+    '@storybook/addon-links',
+    '@storybook/addon-essentials',
+    '@storybook/addon-webpack5-compiler-swc',
+    '@chromatic-com/storybook',
+  ],
+  framework: '@storybook/react-vite',
   async viteFinal(config) {
     // Set relative base path to support deployment on path like /storybook
     config.base = './';
@@ -17,3 +21,5 @@ module.exports = {
     return config;
   },
 };
+
+export default config;

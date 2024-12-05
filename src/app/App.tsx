@@ -3,6 +3,7 @@ import styles from './App.module.css';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { genres } from './constants';
 import { Carousel } from 'react-responsive-carousel';
+import { parseInput } from './utils/parseInput';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
@@ -77,23 +78,28 @@ const App: React.FC = () => {
   const [results, setResults] = useState<Movie[]>([]);
 
   const handleSearch = async () => {
-    const response = await fetch(
-      `/api/proxy/https://api.themoviedb.org/3/search/movie?query=${query}`
-    );
-    const data = await response.json();
-    const movies = data.results;
-
+    const movieTitles = parseInput(query);
     const detailedMovies = await Promise.all(
-      movies.map(async (movie: Movie) => {
-        const movieDetailsResponse = await fetch(
-          `/api/proxy/https://api.themoviedb.org/3/movie/${movie.id}`
+      movieTitles.map(async (title) => {
+        const response = await fetch(
+          `/api/proxy/https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(
+            title
+          )}`
         );
-        const movieDetails = await movieDetailsResponse.json();
-        return { ...movie, runtime: movieDetails.runtime };
+        const data = await response.json();
+        const movie = data.results[0];
+        if (movie) {
+          const movieDetailsResponse = await fetch(
+            `/api/proxy/https://api.themoviedb.org/3/movie/${movie.id}`
+          );
+          const movieDetails = await movieDetailsResponse.json();
+          return { ...movie, runtime: movieDetails.runtime };
+        }
+        return null;
       })
     );
 
-    setResults(detailedMovies);
+    setResults(detailedMovies.filter((movie) => movie !== null) as Movie[]);
   };
 
   return (

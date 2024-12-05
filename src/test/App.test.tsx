@@ -33,5 +33,8 @@ describe('parseInput', () => {
 
     const input10 = '@Juanito Arrival (2016)';
     expect(parseInput(input10)).toEqual('arrival');
+
+    const input11 = 'kill bill';
+    expect(parseInput(input11)).toEqual('kill bill');
   });
 });

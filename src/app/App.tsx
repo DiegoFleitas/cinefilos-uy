@@ -41,7 +41,7 @@ const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => (
     <img
       src={
         movie.poster_path
-          ? `https://image.tmdb.org/t/p/w200${movie.poster_path}`
+          ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
           : 'src/app/default-poster.png'
       }
       alt={movie.title}

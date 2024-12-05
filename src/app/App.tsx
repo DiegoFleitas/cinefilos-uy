@@ -4,6 +4,8 @@ import styles from './App.module.css';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Welcome from './components/Welcome/Welcome';
 import { genres } from './constants';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
 
 interface Genre {
   id: number;
@@ -52,20 +54,29 @@ function App(): JSX.Element {
           />
           <button onClick={handleSearch}>Search</button>
           <div className={styles['results']}>
-            {results.map((movie) => (
-              <div key={movie.id} className={styles['movie']}>
-                <img
-                  src={`https://image.tmdb.org/t/p/w200${movie.poster_path}`}
-                  alt={movie.title}
-                />
-                <h2>{movie.title}</h2>
-                <p>{movie.overview}</p>
-                <p>
-                  Release Year: {new Date(movie.release_date).getFullYear()}
-                </p>
-                <p>Genres: {getGenreNames(movie.genre_ids)}</p>
-              </div>
-            ))}
+            <Carousel className={styles.carousel}>
+              {results.map((movie) => (
+                <div key={movie.id} className={styles['movie']}>
+                  <img
+                    src={
+                      movie.poster_path
+                        ? `https://image.tmdb.org/t/p/w200${movie.poster_path}`
+                        : 'src/app/default-poster.png'
+                    }
+                    alt={movie.title}
+                    className={styles['movie-img']}
+                  />
+                  <fieldset>
+                    <legend>{movie.title}</legend>
+                    {/* <p>{movie.overview}</p> */}
+                    <p>
+                      Release Year: {new Date(movie.release_date).getFullYear()}
+                    </p>
+                    <p>Genres: {getGenreNames(movie.genre_ids)}</p>
+                  </fieldset>
+                </div>
+              ))}
+            </Carousel>
           </div>
         </header>
       </div>

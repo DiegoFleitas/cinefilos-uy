@@ -41,3 +41,15 @@
 button {
   font-size: calc(10px + 2vmin);
 }
+
+.movie img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.carousel {
+  width: 15%; /* Adjust the width as needed */
+  margin: 0 auto; /* Center the carousel */
+}

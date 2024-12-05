@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import styles from './App.module.css';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Welcome from './components/Welcome/Welcome';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { genres } from './constants';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 interface Genre {
   id: number;
@@ -78,6 +77,14 @@ function App(): JSX.Element {
                     <p className={styles.smallText}>
                       Genres: <em>{getGenreNames(movie.genre_ids)}</em>
                     </p>
+                    <a
+                      href={`https://www.themoviedb.org/movie/${movie.id}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={styles['external-link']}
+                    >
+                      <i className="fas fa-external-link-alt"></i>
+                    </a>
                   </fieldset>
                 </div>
               ))}

@@ -9,7 +9,7 @@ const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => (
       src={
         movie.poster_path
           ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
-          : 'src/app/default-poster.png'
+          : 'src/app/assets/default-poster.png'
       }
       alt={movie.title}
       className={styles['movie-img']}

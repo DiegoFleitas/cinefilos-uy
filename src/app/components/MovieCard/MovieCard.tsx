@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, CardMedia, CardContent, Typography, Box } from '@mui/material';
 import { getGenreNames, formatRuntime, isMovieBlacklisted } from '../../utils';
 import { Movie } from '../../types';
+import posterNotFound from '../../assets/poster-not-found.svg';
 
 const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => (
   <Card sx={{ maxWidth: 500, margin: 'auto' }}>
@@ -10,10 +11,10 @@ const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => (
       image={
         movie.poster_path
           ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
-          : 'src/app/assets/default-poster.png'
+          : posterNotFound
       }
       alt={movie.title}
-      sx={{ minWidth: 200, minHeight: 300 }}
+      sx={{ width: '100%', height: 750, objectFit: 'cover' }}
     />
     <CardContent>
       <Typography variant="h5" component="div">
@@ -24,13 +25,17 @@ const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => (
           ({new Date(movie.release_date).getFullYear()})
         </Typography>
       )}
-      <Typography variant="body2" color="text.secondary">
-        Generos: <em>{getGenreNames(movie.genre_ids)}</em>
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
-        Duracion: {formatRuntime(movie.runtime)}{' '}
-        {movie.runtime && movie.runtime > 120 && '⏰⚠️🚨'}
-      </Typography>
+      {movie.genre_ids && movie.genre_ids.length > 0 && (
+        <Typography variant="body2" color="text.secondary">
+          Generos: <em>{getGenreNames(movie.genre_ids)}</em>
+        </Typography>
+      )}
+      {movie.runtime > 0 && (
+        <Typography variant="body2" color="text.secondary">
+          Duracion: {formatRuntime(movie.runtime)}{' '}
+          {movie.runtime > 120 && '⏰⚠️🚨'}
+        </Typography>
+      )}
       <Typography variant="body2" color="text.secondary">
         Eligibilidad:{' '}
         {isMovieBlacklisted(movie.id) ? '🎬🚫🔄 Ya la vimos!!' : '👌🎉👍'}

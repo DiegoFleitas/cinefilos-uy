@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import styles from './App.module.css';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { parseInput } from './utils';
 import SearchBar from './components/SearchBar/SearchBar';
 import Results from './components/Results/Results';
 import { Movie } from './types';
+import { Container, Typography, Button, Box } from '@mui/material';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
@@ -79,17 +79,32 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      <div className={styles.App}>
-        <header className={styles['App-header']}>
-          <SearchBar
-            query={query}
-            setQuery={setQuery}
-            handleSearch={handleSearch}
-            isLoading={isLoading}
-          />
-          <Results results={results} />
-        </header>
-      </div>
+      <Container sx={{ width: '100%', padding: 0 }}>
+        <Box
+          sx={{
+            backgroundColor: '#282c34',
+            minHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            color: 'white',
+            padding: '20px 0',
+          }}
+        >
+          <Typography variant="h1" component="h1" sx={{ marginBottom: '20px' }}>
+            Herramienta cinefila
+          </Typography>
+          <Box sx={{ width: '100%', maxWidth: '600px' }}>
+            <SearchBar
+              query={query}
+              setQuery={setQuery}
+              handleSearch={handleSearch}
+              isLoading={isLoading}
+            />
+            <Results results={results} />
+          </Box>
+        </Box>
+      </Container>
     </Router>
   );
 };

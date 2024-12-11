@@ -1,4 +1,5 @@
 import React from 'react';
+import { TextField, Button, Box } from '@mui/material';
 import styles from './SearchBar.module.css';
 
 const SearchBar: React.FC<{
@@ -7,20 +8,41 @@ const SearchBar: React.FC<{
   handleSearch: () => void;
   isLoading: boolean;
 }> = ({ query, setQuery, handleSearch, isLoading }) => (
-  <div className={styles.paddingVertical}>
-    <textarea
+  <Box
+    sx={{
+      padding: '20px',
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+    }}
+  >
+    <TextField
       value={query}
       onChange={(e) => setQuery(e.target.value)}
+      variant="outlined"
+      fullWidth
+      multiline
+      rows={4}
+      placeholder="nombra una pelicula..."
       className={styles.input}
+      InputProps={{
+        sx: {
+          backgroundColor: 'white',
+          color: 'black',
+        },
+      }}
     />
-    <button
-      className={styles.button}
+    <Button
+      variant="contained"
+      color="primary"
       onClick={handleSearch}
       disabled={isLoading}
+      className={styles.button}
+      sx={{ marginTop: '20px', padding: '10px 20px' }}
     >
       {isLoading ? 'Buscando...' : 'Buscar'}
-    </button>
-  </div>
+    </Button>
+  </Box>
 );
 
 export default SearchBar;

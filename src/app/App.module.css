@@ -48,3 +48,9 @@ button {
   display: block;
   margin: 0 auto;
 }
+
+.info {
+  margin-top: 20px;
+  text-align: left;
+  color: black;
+}

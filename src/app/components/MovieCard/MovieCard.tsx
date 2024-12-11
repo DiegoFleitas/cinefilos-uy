@@ -1,48 +1,51 @@
 import React from 'react';
-import styles from './MovieCard.module.css';
+import { Card, CardMedia, CardContent, Typography, Box } from '@mui/material';
 import { getGenreNames, formatRuntime, isMovieBlacklisted } from '../../utils';
 import { Movie } from '../../types';
 
 const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => (
-  <div key={movie.id} className={styles.movie}>
-    <img
-      src={
+  <Card sx={{ maxWidth: 500, margin: 'auto' }}>
+    <CardMedia
+      component="img"
+      image={
         movie.poster_path
           ? `https://image.tmdb.org/t/p/original${movie.poster_path}`
           : 'src/app/assets/default-poster.png'
       }
       alt={movie.title}
-      className={styles['movie-img']}
-      style={{ minWidth: '200px', minHeight: '300px' }}
+      sx={{ minWidth: 200, minHeight: 300 }}
     />
-    <fieldset>
-      <legend>{movie.title}</legend>
+    <CardContent>
+      <Typography variant="h5" component="div">
+        {movie.title}
+      </Typography>
       {!isNaN(new Date(movie.release_date).getFullYear()) && (
-        <p className={styles.smallText}>
+        <Typography variant="body2" color="text.secondary">
           ({new Date(movie.release_date).getFullYear()})
-        </p>
+        </Typography>
       )}
-      <p className={styles.smallText}>
+      <Typography variant="body2" color="text.secondary">
         Generos: <em>{getGenreNames(movie.genre_ids)}</em>
-      </p>
-      <p className={styles.smallText}>
+      </Typography>
+      <Typography variant="body2" color="text.secondary">
         Duracion: {formatRuntime(movie.runtime)}{' '}
         {movie.runtime && movie.runtime > 120 && '⏰⚠️🚨'}
-      </p>
-      <p className={styles.smallText}>
+      </Typography>
+      <Typography variant="body2" color="text.secondary">
         Eligibilidad:{' '}
         {isMovieBlacklisted(movie.id) ? '🎬🚫🔄 Ya la vimos!!' : '👌🎉👍'}
-      </p>
-      <a
-        href={`https://www.themoviedb.org/movie/${movie.id}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className={styles['external-link']}
-      >
-        <i className="fas fa-external-link-alt"></i>
-      </a>
-    </fieldset>
-  </div>
+      </Typography>
+      <Box sx={{ marginTop: '10px' }}>
+        <a
+          href={`https://www.themoviedb.org/movie/${movie.id}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <i className="fas fa-external-link-alt"></i>
+        </a>
+      </Box>
+    </CardContent>
+  </Card>
 );
 
 export default MovieCard;

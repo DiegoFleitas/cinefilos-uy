@@ -1,21 +1,21 @@
 import React from 'react';
 import { Carousel } from 'react-responsive-carousel';
 import MovieCard from '../MovieCard/MovieCard';
-import styles from './Results.module.css';
 import { Movie } from '../../types';
+import { Box, Container } from '@mui/material';
 
 const Results: React.FC<{ results: Movie[][] }> = ({ results }) => (
-  <div className={`${styles.results} ${styles['padding-vertical']}`}>
+  <Container sx={{ paddingY: 4 }}>
     {results.map((movies, index) => (
-      <div key={index} className={styles.carouselContainer}>
-        <Carousel className={styles.carousel}>
+      <Box key={index} sx={{ marginBottom: 4 }}>
+        <Carousel>
           {movies.map((movie) => (
             <MovieCard key={movie.id} movie={movie} />
           ))}
         </Carousel>
-      </div>
+      </Box>
     ))}
-  </div>
+  </Container>
 );
 
 export default Results;

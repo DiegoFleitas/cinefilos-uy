@@ -1,0 +1,15 @@
+.movie-img {
+  min-width: 200px;
+  min-height: 300px;
+  max-width: 500px;
+  max-height: 750px;
+}
+
+.smallText {
+  font-size: 0.6em; /* Adjust the font size as needed */
+}
+
+.external-link {
+  display: block;
+  margin-bottom: 20px; /* Adjust the value as needed */
+}

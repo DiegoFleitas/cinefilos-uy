@@ -1,4 +1,24 @@
+import { genres, blacklist } from './constants';
+import { Genre } from './types';
 import XRegExp from 'xregexp';
+
+export const getGenreNames = (genreIds: number[]): string => {
+  return genreIds
+    .map((id) => genres.find((genre: Genre) => genre.id === id)?.name)
+    .filter((name) => name)
+    .join(', ');
+};
+
+export const formatRuntime = (runtime?: number): string => {
+  if (runtime === undefined) return 'N/A';
+  const hours = Math.floor(runtime / 60);
+  const minutes = runtime % 60;
+  return `${hours}h ${minutes}m`;
+};
+
+export const isMovieBlacklisted = (movieId: number): boolean => {
+  return blacklist.some((item) => item.tmdbID === movieId);
+};
 
 export const parseInput = (
   inputString: string,

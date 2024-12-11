@@ -1,4 +1,4 @@
-import { parseInput } from '../app/utils/parseInput';
+import { parseInput } from '../app/utils';
 
 describe('parseInput', () => {
   it('should parse movie titles correctly', () => {

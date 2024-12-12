@@ -31,7 +31,7 @@ const App: React.FC = () => {
 
     const fetchMovieDetails = async (movieId: number) => {
       const response = await fetch(
-        `/api/proxy/https://api.themoviedb.org/3/movie/${movieId}`
+        `/api/proxy/https://api.themoviedb.org/3/movie/${movieId}&include_adult=true`
       );
       return response.json();
     };
@@ -45,7 +45,7 @@ const App: React.FC = () => {
         const response = await fetch(
           `/api/proxy/https://api.themoviedb.org/3/search/movie?query=${encodeURIComponent(
             title
-          )}&page=${page}`
+          )}&page=${page}&include_adult=true`
         );
         const data = await response.json();
         totalPages = data.total_pages;

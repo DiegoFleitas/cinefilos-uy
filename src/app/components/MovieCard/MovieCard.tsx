@@ -18,7 +18,7 @@ const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => (
     />
     <CardContent>
       <Typography variant="h5" component="div">
-        {movie.title}
+        {movie.title} {movie.adult && '🔞👉👌'}
       </Typography>
       {!isNaN(new Date(movie.release_date).getFullYear()) && (
         <Typography variant="body2" color="text.secondary">
@@ -45,16 +45,17 @@ const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => (
           href={`https://letterboxd.com/tmdb/${movie.id}`}
           target="_blank"
           rel="noopener noreferrer"
-          style={{ marginLeft: '10px' }}
+          style={{ marginLeft: '10px', paddingRight: '10px' }}
         >
-          <i className="fas fa-external-link-alt"></i>
+          letterboxd <i className="fas fa-external-link-alt"></i>
         </a>
         <a
           href={`https://www.themoviedb.org/movie/${movie.id}`}
           target="_blank"
           rel="noopener noreferrer"
+          style={{ paddingLeft: '10px' }}
         >
-          <i className="fas fa-external-link-alt"></i>
+          tmdb <i className="fas fa-external-link-alt"></i>
         </a>
       </Box>
     </CardContent>

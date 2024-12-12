@@ -5,7 +5,8 @@ import { Movie } from '../../types';
 import posterNotFound from '../../assets/poster-not-found.svg';
 
 const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => (
-  <Card sx={{ maxWidth: 500, margin: 'auto' }}>
+  <Card sx={{ maxWidth: '31.25rem', margin: 'auto' }}>
+    {' '}
     <CardMedia
       component="img"
       image={
@@ -14,7 +15,7 @@ const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => (
           : posterNotFound
       }
       alt={movie.title}
-      sx={{ width: '100%', height: 750, objectFit: 'cover' }}
+      sx={{ width: '100%', height: '46.877505rem', objectFit: 'cover' }}
     />
     <CardContent>
       <Typography variant="h5" component="div">

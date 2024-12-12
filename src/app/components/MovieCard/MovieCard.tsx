@@ -42,6 +42,14 @@ const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => (
       </Typography>
       <Box sx={{ marginTop: '10px' }}>
         <a
+          href={`https://letterboxd.com/tmdb/${movie.id}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ marginLeft: '10px' }}
+        >
+          <i className="fas fa-external-link-alt"></i>
+        </a>
+        <a
           href={`https://www.themoviedb.org/movie/${movie.id}`}
           target="_blank"
           rel="noopener noreferrer"

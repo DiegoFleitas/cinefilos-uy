@@ -30,6 +30,9 @@ const Results: React.FC<{ results: Movie[][] }> = ({ results }) => {
           <Carousel
             selectedItem={carouselIndices[carouselIndex]}
             onChange={(index) => handleCarouselChange(index, carouselIndex)}
+            verticalSwipe="natural"
+            preventMovementUntilSwipeScrollTolerance={true}
+            swipeScrollTolerance={20}
           >
             {movies.map((movie) => (
               <MovieCard key={movie.id} movie={movie} />

@@ -91,7 +91,14 @@ const App: React.FC = () => {
             padding: '20px 0',
           }}
         >
-          <Typography variant="h1" component="h1" sx={{ marginBottom: '20px' }}>
+          <Typography
+            variant="h1"
+            component="h1"
+            sx={{
+              marginBottom: '20px',
+              fontSize: { xs: '2rem', sm: '3rem', md: '4rem', lg: '5rem' },
+            }}
+          >
             Peli OK?
           </Typography>
           <Box sx={{ width: '100%', maxWidth: '600px' }}>

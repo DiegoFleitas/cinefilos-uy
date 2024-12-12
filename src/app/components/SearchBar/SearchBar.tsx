@@ -23,7 +23,7 @@ const SearchBar: React.FC<{
       fullWidth
       multiline
       rows={4}
-      placeholder="nombra una pelicula..."
+      placeholder="nombra una pelicula y dale buscar..."
       className={styles.input}
       InputProps={{
         sx: {

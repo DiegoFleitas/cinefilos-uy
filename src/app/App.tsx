@@ -92,7 +92,7 @@ const App: React.FC = () => {
           }}
         >
           <Typography variant="h1" component="h1" sx={{ marginBottom: '20px' }}>
-            Herramienta cinefila
+            Peli OK?
           </Typography>
           <Box sx={{ width: '100%', maxWidth: '600px' }}>
             <SearchBar

@@ -38,7 +38,7 @@ const MovieCard: React.FC<{ movie: Movie }> = ({ movie }) => (
       )}
       <Typography variant="body2" color="text.secondary">
         Eligibilidad:{' '}
-        {isMovieBlacklisted(movie.id) ? '🎬🚫🔄 Ya la vimos!!' : '👌🎉👍'}
+        {isMovieBlacklisted(movie.id) ? '🎬🚫🔄 Ya la vimos!!' : 'OK 👌'}
       </Typography>
       <Box sx={{ marginTop: '10px' }}>
         <a

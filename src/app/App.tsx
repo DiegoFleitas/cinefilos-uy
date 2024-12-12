@@ -4,7 +4,14 @@ import { parseInput } from './utils';
 import SearchBar from './components/SearchBar/SearchBar';
 import Results from './components/Results/Results';
 import { Movie } from './types';
-import { Container, Typography, Button, Box } from '@mui/material';
+import {
+  Container,
+  Typography,
+  Button,
+  Box,
+  Snackbar,
+  Alert,
+} from '@mui/material';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 
@@ -12,6 +19,8 @@ const App: React.FC = () => {
   const [query, setQuery] = useState<string>('');
   const [results, setResults] = useState<Movie[][]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showNotification, setShowNotification] = useState<boolean>(false);
+  const [googleSearchLink, setGoogleSearchLink] = useState<string>('');
 
   const MAX_MOVIES = 15;
 
@@ -42,10 +51,10 @@ const App: React.FC = () => {
         totalPages = data.total_pages;
 
         if (data.results.length === 0) {
-          window.open(
-            `https://www.google.com/search?q=${encodeURIComponent(title)}`,
-            '_blank'
+          setGoogleSearchLink(
+            `https://www.google.com/search?q=${encodeURIComponent(title)}`
           );
+          setShowNotification(true);
           setIsLoading(false);
           return [];
         }
@@ -75,6 +84,15 @@ const App: React.FC = () => {
 
     setResults((prevResults) => [detailedMovies, ...prevResults]);
     setIsLoading(false);
+  };
+
+  const handleCloseNotification = () => {
+    setShowNotification(false);
+  };
+
+  const handleOpenGoogle = () => {
+    window.open(googleSearchLink, '_blank');
+    setShowNotification(false);
   };
 
   return (
@@ -112,6 +130,32 @@ const App: React.FC = () => {
           </Box>
         </Box>
       </Container>
+      <Snackbar
+        open={showNotification}
+        autoHideDuration={6000}
+        onClose={handleCloseNotification}
+        anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
+      >
+        <Alert
+          onClose={handleCloseNotification}
+          severity="info"
+          sx={{ width: '100%' }}
+          action={
+            <Button color="inherit" size="small" onClick={handleOpenGoogle}>
+              Buscar en Google
+            </Button>
+          }
+        >
+          <Box>
+            <Typography>
+              No se encontraron resultados para "{query}".
+            </Typography>
+            <Typography variant="caption">
+              (Las búsquedas son más efectivas con el título original)
+            </Typography>
+          </Box>
+        </Alert>
+      </Snackbar>
     </Router>
   );
 };

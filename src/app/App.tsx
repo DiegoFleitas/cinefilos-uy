@@ -97,7 +97,9 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      <Container sx={{ width: '100%', padding: 0 }}>
+      <Container
+        sx={{ width: '100vw', padding: 0, margin: 0, maxWidth: '100vw' }}
+      >
         <Box
           sx={{
             backgroundColor: '#282c34',
@@ -107,6 +109,7 @@ const App: React.FC = () => {
             alignItems: 'center',
             color: 'white',
             padding: '20px 0',
+            width: '100vw',
           }}
         >
           <Typography

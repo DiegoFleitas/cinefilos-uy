@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { parseInput } from './utils';
 import SearchBar from './components/SearchBar/SearchBar';
@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import Notice from './components/Notice/Notice';
 
 const App: React.FC = () => {
   const [query, setQuery] = useState<string>('');
@@ -21,6 +22,7 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showNotification, setShowNotification] = useState<boolean>(false);
   const [googleSearchLink, setGoogleSearchLink] = useState<string>('');
+  const [notice, setNotice] = useState<string>('');
 
   const MAX_MOVIES = 15;
 
@@ -95,11 +97,33 @@ const App: React.FC = () => {
     setShowNotification(false);
   };
 
+  const getNotice = () => {
+    const notices: { [key: string]: string } = {
+      Monday: 'HOY - Inicio nominaciones',
+      Tuesday: 'HOY - Inicio votación',
+      Wednesday: 'HOY - Continúa votación',
+      Thursday: 'HOY - Cierre votacion (23:59hrs)',
+      Friday: 'HOY - Proyeccion película ganadora (19:30hrs)',
+      Saturday: 'HOY - Disfrutá el finde!',
+      Sunday: 'HOY - Disfrutá el finde!',
+    };
+    const today = new Date();
+    const dayName: string = today.toLocaleDateString('en-US', {
+      weekday: 'long',
+    });
+    return notices[dayName] || '';
+  };
+
+  useEffect(() => {
+    setNotice(getNotice());
+  }, []);
+
   return (
     <Router>
       <Container
         sx={{ width: '100vw', padding: 0, margin: 0, maxWidth: '100vw' }}
       >
+        <Notice message={notice} />
         <Box
           sx={{
             backgroundColor: '#282c34',
